@@ -9,7 +9,7 @@ public class CalcController {
     public Result add(@PathVariable int x, @PathVariable int y){
         return new Result(x,y,x + y);
     }
-
+    //test comment added
     @RequestMapping( method = RequestMethod.GET, value = "/sub/{x}/{y}")
     public Result sub(@PathVariable int x, @PathVariable int y) {
         return new Result(x, y, x - y);
