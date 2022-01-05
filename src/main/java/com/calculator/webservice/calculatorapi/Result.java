@@ -1,9 +1,15 @@
 package com.calculator.webservice.calculatorapi;
+import javax.validation.constraints.NotNull;
 
 public class Result {
 
+    @NotNull
     private int a;
+
+    @NotNull
     private int b;
+
+    @NotNull
     private int result;
 
     public Result() {
