@@ -1,10 +1,9 @@
-package com.calculator.webservice.calculatorapi;
+package com.calculator.webservice.calculatorapi.service;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class CalcService {
-
     public int sum(int firstnum, int secondnum){
         return firstnum + secondnum ;
     }
@@ -32,6 +31,8 @@ public class CalcService {
     //Division without mod operator
     public int division(int firstnum, int secondnum){
         int div = 0 ;
+        if(( firstnum == 0 ) || (secondnum == 0))
+            return 0;
         while(firstnum >= secondnum){
             firstnum = firstnum - secondnum;
             div++ ;
