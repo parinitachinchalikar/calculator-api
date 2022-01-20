@@ -1,5 +1,6 @@
 package com.calculator.webservice.security;
 
+import com.calculator.webservice.calculatorapi.repository.UserRepo;
 import com.calculator.webservice.calculatorapi.service.UserPrincipalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,18 +10,24 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private UserRepo userRepo;
+
     @Autowired
     private UserPrincipalDetailService userPrincipalDetailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
@@ -30,6 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(),this.userRepo))
                 .authorizeRequests()
                 .antMatchers("/add/**").permitAll()
                 .antMatchers("/sub/**").authenticated()
