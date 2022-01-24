@@ -37,20 +37,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                //remove csrf and state in session because it is not needed in jwt
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .authorizeRequests() .anyRequest() .authenticated()
+                //added jwt filters (1. authentication 2. authorization)
+                /*
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(),this.userRepo))
                 .authorizeRequests()
-                .antMatchers("/add/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/users").permitAll()
+                .antMatchers("/add/**").authenticated()
                 .antMatchers("/sub/**").authenticated()
                 .antMatchers("/mul/**").hasAnyRole("ADMIN","MANAGER")
                 .antMatchers("/div/**").hasAnyRole("ADMIN","MANAGER")
                 .antMatchers("/add/**").hasAnyAuthority("USER","ROLE_MANAGER","ROLE_ADMIN")
                 .antMatchers("v2/mul/**").hasAnyAuthority("ROLE_MANAGER","ROLE_ADMIN")
                 .antMatchers("v2/div/**").hasAnyAuthority("ROLE_MANAGER","ROLE_ADMIN")
-                .antMatchers("/users").hasRole("ROLE_ADMIN")
+
+                 */
                 .and()
                 .httpBasic();
     }
@@ -63,11 +70,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return daoAuthenticationProvider;
     }
-
-    /*
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-     */
 }

@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static com.calculator.webservice.security.JwtProperties.SECRET;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -26,11 +26,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.setFilterProcessesUrl("/login");
         this.authenticationManager = authenticationManager;
     }
 
+//    public JwtAuthenticationFilter() {
+//        super("/login");
+//    }
+
+    /*Trigger when we issue POST request to /login
+         Need to pass credentials as {"username":"pari", "password":"pari123"} in the request body
+        */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
+            AuthenticationException {
         //get credentials and map to login view model
         LoginViewModel credentials = null;
         try {
@@ -51,7 +60,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
         //get Principal
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 
