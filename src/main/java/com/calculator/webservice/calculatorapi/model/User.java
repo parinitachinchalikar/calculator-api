@@ -1,10 +1,8 @@
 package com.calculator.webservice.calculatorapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "user")
 @Table(name = "user")
@@ -12,16 +10,17 @@ public class User {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private long id;
 
     @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
-    @Column(name = "active")
+   /* @Column(name = "active")
     private int active;
 
     @Column(name = "roles")
@@ -38,21 +37,25 @@ public class User {
         this.roles = roles;
         this.permissions = permissions;
         this.active = 1;
-    }
-
-    public long getId() {
-        return id;
-    }
+    }*/
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public int getActive() {
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /*public int getActive() {
         return active;
     }
 
@@ -76,5 +79,5 @@ public class User {
             return Arrays.asList(this.permissions.split(","));
         }
         return new ArrayList<>();
-    }
+    }*/
 }

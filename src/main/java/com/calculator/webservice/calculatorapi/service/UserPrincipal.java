@@ -1,3 +1,4 @@
+/*
 package com.calculator.webservice.calculatorapi.service;
 
 import com.calculator.webservice.calculatorapi.model.User;
@@ -67,3 +68,4 @@ public class UserPrincipal implements UserDetails {
         return this.user.getActive() == 1;
     }
 }
+*/
